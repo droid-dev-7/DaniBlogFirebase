@@ -1,8 +1,11 @@
 package com.beginners.blogapp;
 
+import android.*;
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,6 +39,7 @@ public class PostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_post);
 
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -78,12 +82,13 @@ public class PostActivity extends AppCompatActivity {
 
         if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(desc) && mImageUri!=null){
 
-            StorageReference filepath = mStorage.child("Blog Images").child(mImageUri.getLastPathSegment());
+            StorageReference filepath = mStorage.child("Blog_Images").child(mImageUri.getLastPathSegment());
             filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    @SuppressWarnings("VisibleForTests")
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     mProgress.dismiss();
 
                 }
