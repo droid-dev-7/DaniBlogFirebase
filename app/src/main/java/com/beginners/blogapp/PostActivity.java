@@ -16,6 +16,9 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,6 +36,7 @@ public class PostActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST=1;
 
     private StorageReference mStorage;
+    private DatabaseReference mDatabase;
 
     private ProgressDialog mProgress;
 
@@ -43,6 +47,7 @@ public class PostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post);
 
         mStorage = FirebaseStorage.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
 
         mSelectImage = (ImageButton) findViewById(R.id.imageSelect);
 
@@ -75,12 +80,13 @@ public class PostActivity extends AppCompatActivity {
     private void startPosting() {
 
         mProgress.setMessage("Posting to Blog...");
-        mProgress.show();
 
-        String title = mPostTitle.getText().toString().trim();
-        String desc = mPostDesc.getText().toString().trim();
+        final String title = mPostTitle.getText().toString().trim();
+        final String desc = mPostDesc.getText().toString().trim();
 
         if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(desc) && mImageUri!=null){
+
+            mProgress.show();
 
             StorageReference filepath = mStorage.child("Blog_Images").child(mImageUri.getLastPathSegment());
             filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -89,8 +95,16 @@ public class PostActivity extends AppCompatActivity {
 
                     @SuppressWarnings("VisibleForTests")
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                    DatabaseReference newPost = mDatabase.push();
+
+                    newPost.child("title").setValue(title);
+                    newPost.child("desc").setValue(desc);
+                    newPost.child("image").setValue(downloadUrl.toString());
+
                     mProgress.dismiss();
 
+                    startActivity(new Intent(PostActivity.this, MainActivity.class) );
                 }
             });
 
