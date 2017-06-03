@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
-
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
 
         mBlogList = (RecyclerView) findViewById(R.id.blog_list);
@@ -129,7 +127,17 @@ public class MainActivity extends AppCompatActivity {
         if(item.getItemId()==R.id.action_add){
             startActivity(new Intent(MainActivity.this, PostActivity.class));
         }
+        
+        if(item.getItemId()==R.id.action_logout){
+            logout();
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+
+        mAuth.signOut();
+
     }
 }
