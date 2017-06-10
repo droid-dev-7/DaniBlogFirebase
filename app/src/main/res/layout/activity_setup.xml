@@ -22,14 +22,35 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/setupImageBtn"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <EditText
+            android:id="@+id/setupNameField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/setupImageBtn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Setup Page" />
+            android:hint="Enter Your Display Name"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/setupSubmitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Finish Setup" />
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
